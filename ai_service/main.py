@@ -20,8 +20,11 @@ async def health_check() -> dict[str, str]:
 
 @app.post("/api/v1/cv/parse", tags=["CV Processing"])
 async def parse_cv(file: UploadFile = File(...)):
+    """
+    An endpoint for uploading a PDF CV and extracting text/info from it using LLM.
+    """
     if file.content_type != "application/pdf":
-        raise HTTPException(status_code=400, detail="Only PDF files are allowed.")
+        raise HTTPException(status_code=400, detail="Only PDF files are allowed. Please upload a valid CV.")
 
     try:
         content = await file.read()
