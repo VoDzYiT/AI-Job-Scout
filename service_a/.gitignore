@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+.venv
+venv/
+env/
+*.egg-info/
+dist/
+build/
+
+# Docker
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# Node (for later frontend)
+node_modules/
+.next/
+out/
