@@ -5,6 +5,7 @@ load_dotenv()
 
 from services.pdf_parser import extract_text_from_pdf
 from services.llm_service import extract_info_from_cv
+from services.mock_jobs import get_mock_jobs
 
 app = FastAPI(
     title="AI & Scraper Service",
@@ -16,6 +17,11 @@ app = FastAPI(
 @app.get("/health", tags=["System"])
 async def health_check() -> dict[str, str]:
     return {"status": "ok", "message": "AI Service is up and running"}
+
+
+@app.get("/api/v1/jobs/mock", tags=["Jobs"])
+async def fetch_mock_jobs():
+    return {"jobs": [job.model_dump() for job in get_mock_jobs()]}
 
 
 @app.post("/api/v1/cv/parse", tags=["CV Processing"])
