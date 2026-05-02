@@ -1,10 +1,11 @@
 import httpx
+import asyncio
 from bs4 import BeautifulSoup
 from schemas.job import Job
 
 async def scrape_jobs(keyword: str, location: str, limit: int = 5) -> list[Job]:
     """
-    Scrapes LinkedIn public job search for real vacancies.
+    Scrapes LinkedIn public job search for real vacancies and their full descriptions.
     """
     url = f"https://www.linkedin.com/jobs/search?keywords={keyword}&location={location}"
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
@@ -28,9 +29,15 @@ async def scrape_jobs(keyword: str, location: str, limit: int = 5) -> list[Job]:
                 id=job_id,
                 title=title_elem.text.strip(),
                 company=company_elem.text.strip(),
-                description=f"Apply here: {job_url}",
+                description="", # Will be populated concurrently below
                 required_skills=[]
             ))
+            
+    # Concurrently fetch full descriptions for all scraped jobs
+    async def fetch_desc(job: Job):
+        job.description = await scrape_job_description(job.id)
+        
+    await asyncio.gather(*(fetch_desc(job) for job in jobs))
             
     return jobs
 
