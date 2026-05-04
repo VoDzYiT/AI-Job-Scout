@@ -16,3 +16,5 @@ typing_extensions==4.15.0
 uvicorn==0.45.0
 python-dotenv==1.0.1
 openai
+beautifulsoup4==4.12.3
+httpx==0.27.0
