@@ -14,7 +14,7 @@ const Login = () => {
         try {
             await login(email, password);
         } catch {
-            // error is set in context
+            // error handled in context
         } finally {
             setIsSubmitting(false);
         }

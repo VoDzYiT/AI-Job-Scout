@@ -1,31 +1,24 @@
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
-.env
-.venv
-venv/
-env/
 *.egg-info/
-dist/
-build/
-*.egg
+.venv/
+venv/
 
-# Docker
-*.log
+# Environment
+.env
+
+# Node
+node_modules/
+frontend/dist/
 
 # IDE
 .vs/
 .vscode/
 .idea/
-*.swp
-*.swo
 
-# Node
-node_modules/
-frontend/dist/
-frontend/.env.local
+# Docker
+*.log
 
 # OS
 .DS_Store

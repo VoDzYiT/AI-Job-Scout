@@ -1,5 +1,5 @@
-# docker-compose.yml
 services:
+  # PostgreSQL Database
   db:
     image: postgres:15-alpine
     container_name: ai-scout-db
@@ -17,21 +17,52 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - ai-scout-network
 
+  # Service A: User & Gateway
   service_a:
     build: ./service_a
     container_name: service-a
     restart: unless-stopped
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./service_a:/app
     environment:
       DATABASE_URL: postgresql://postgres:postgres@db:5432/ai_job_scout
+      SERVICE_B_URL: http://service_b:8001
     depends_on:
       db:
         condition: service_healthy
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - ai-scout-network
+
+  # Service B: AI/Scraper
+  service_b:
+    build: ./ai_service
+    container_name: service-b
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/ai_job_scout
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - ai-scout-network
+
+  # Frontend: React + Nginx
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - service_a
+    networks:
+      - ai-scout-network
+
+networks:
+  ai-scout-network:
+    driver: bridge
 
 volumes:
   postgres_data:
