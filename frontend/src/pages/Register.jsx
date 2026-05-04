@@ -15,7 +15,7 @@ const Register = () => {
         try {
             await register(email, password, fullName);
         } catch {
-            // error is set in context
+            // error handled in context
         } finally {
             setIsSubmitting(false);
         }
