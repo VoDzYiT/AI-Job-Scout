@@ -1,25 +1,23 @@
-# Python
+# Python / Build
 __pycache__/
 *.py[cod]
+*$py.class
 *.egg-info/
+
+# Environments
+.env
 .venv/
 venv/
+env/
 
-# Environment
-.env
+# IDEs
+.idea/
+.vscode/
+.vs/
 
-# Node
+# Node (Frontend)
 node_modules/
 frontend/dist/
 
-# IDE
-.vs/
-.vscode/
-.idea/
-
-# Docker
+# Docker & Logs
 *.log
-
-# OS
-.DS_Store
-Thumbs.db
