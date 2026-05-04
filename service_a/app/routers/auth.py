@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, attributes
 from app.database import get_db
 from app.models import User
-from app.schemas.user import UserCreate, UserLogin, UserResponse, Token
-from app.auth import get_password_hash, verify_password, create_access_token, get_current_user
+from app.schemas.user import UserCreate, UserLogin, UserResponse, Token, UserPreferences
+from app.security import get_password_hash, verify_password, create_access_token, get_current_user
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -38,3 +38,20 @@ def login(data: UserLogin, db: Session = Depends(get_db)):
 @router.get("/me", response_model=UserResponse)
 async def me(current_user: User = Depends(get_current_user)):
     return current_user
+
+@router.put("/preferences", response_model=UserResponse)
+async def update_preferences(
+    prefs: UserPreferences,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Update user matching rules/preferences.
+    """
+    db_user = db.query(User).filter(User.id == current_user.id).first()
+    db_user.matching_rules = prefs.matching_rules
+    attributes.flag_modified(db_user, "matching_rules")
+    db.commit()
+    db.refresh(db_user)
+    print(f"DEBUG: Updated matching rules for user {db_user.id}: {db_user.matching_rules}")
+    return db_user

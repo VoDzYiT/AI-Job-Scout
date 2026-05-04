@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import './Auth.css';
 
 const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [fullName, setFullName] = useState('');
+    const [name, setName] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const { register, error } = useAuth();
 
@@ -13,7 +14,7 @@ const Register = () => {
         e.preventDefault();
         setIsSubmitting(true);
         try {
-            await register(email, password, fullName);
+            await register(email, password, name);
         } catch {
             // error handled in context
         } finally {
@@ -22,33 +23,48 @@ const Register = () => {
     };
 
     return (
-        <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px' }}>
-            <h1>Register</h1>
-            <form onSubmit={handleSubmit}>
-                {error && <div style={{ color: 'red', marginBottom: '10px' }}>{error}</div>}
-                <div style={{ marginBottom: '15px' }}>
-                    <label>Full Name:</label>
-                    <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)}
-                        style={{ width: '100%', padding: '8px', marginTop: '5px' }} />
+        <div className="auth-container">
+            <div className="auth-card glass">
+                <h1>Join AI Scout</h1>
+                <form className="auth-form" onSubmit={handleSubmit}>
+                    {error && <div className="error-message">{error}</div>}
+                    <div className="input-group">
+                        <label>Full Name</label>
+                        <input 
+                            type="text" 
+                            value={name} 
+                            onChange={(e) => setName(e.target.value)} 
+                            required 
+                            placeholder="Your Name"
+                        />
+                    </div>
+                    <div className="input-group">
+                        <label>Email Address</label>
+                        <input 
+                            type="email" 
+                            value={email} 
+                            onChange={(e) => setEmail(e.target.value)} 
+                            required 
+                            placeholder="your@email.com"
+                        />
+                    </div>
+                    <div className="input-group">
+                        <label>Password</label>
+                        <input 
+                            type="password" 
+                            value={password} 
+                            onChange={(e) => setPassword(e.target.value)} 
+                            required 
+                        />
+                    </div>
+                    <button type="submit" className="btn-hero" disabled={isSubmitting}>
+                        {isSubmitting ? 'Creating account...' : 'Get Started'}
+                    </button>
+                </form>
+                <div className="auth-footer">
+                    Already have an account? <Link to="/login">Login here</Link>
                 </div>
-                <div style={{ marginBottom: '15px' }}>
-                    <label>Email:</label>
-                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required
-                        style={{ width: '100%', padding: '8px', marginTop: '5px' }} />
-                </div>
-                <div style={{ marginBottom: '15px' }}>
-                    <label>Password:</label>
-                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8}
-                        style={{ width: '100%', padding: '8px', marginTop: '5px' }} />
-                </div>
-                <button type="submit" disabled={isSubmitting}
-                    style={{ width: '100%', padding: '10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
-                    {isSubmitting ? 'Registering...' : 'Register'}
-                </button>
-            </form>
-            <p style={{ marginTop: '15px', textAlign: 'center' }}>
-                Already have an account? <Link to="/login">Login here</Link>
-            </p>
+            </div>
         </div>
     );
 };
