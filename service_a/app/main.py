@@ -1,14 +1,18 @@
 from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import text
-from app.database import get_db
-from app.routers import auth
-from app.auth import get_current_user
+from app.database import get_db, engine, Base
+from app.routers import auth, jobs
+from app.security import get_current_user
+
+# Create database tables
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="AI Job Scout - Service A", version="0.1.0")
 
 # Include routers
 app.include_router(auth.router)
+app.include_router(jobs.router)
 
 @app.get("/health")
 async def health_check():
