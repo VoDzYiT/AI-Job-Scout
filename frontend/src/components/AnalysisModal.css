@@ -1,0 +1,142 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(10, 25, 47, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    width: 90%;
+    max-width: 1100px;
+    height: 80vh;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    background: transparent;
+    color: var(--white);
+    font-size: 2rem;
+    z-index: 10;
+}
+
+.modal-body {
+    display: flex;
+    height: 100%;
+}
+
+.column {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+}
+
+.job-info {
+    border-right: 1px solid rgba(100, 255, 218, 0.1);
+}
+
+.description-scroll {
+    margin-top: 20px;
+    overflow-y: auto;
+    padding-right: 15px;
+    color: var(--text-dim);
+    font-size: 0.95rem;
+}
+
+.match-analysis {
+    background: rgba(100, 255, 218, 0.02);
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.upload-prompt {
+    max-width: 400px;
+}
+
+.upload-prompt input {
+    margin: 30px 0;
+    width: 100%;
+}
+
+.score-container {
+    margin-bottom: 40px;
+}
+
+.score-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 5px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px auto;
+}
+
+.score-number {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent);
+}
+
+.ai-explanation {
+    text-align: left;
+    background: var(--primary);
+    padding: 25px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.upload-prompt p {
+    color: var(--text-secondary);
+    margin-bottom: 25px;
+}
+
+.error-message {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.ai-explanation h4 {
+    color: var(--accent);
+    margin-bottom: 10px;
+}
+
+.ai-explanation p {
+    color: var(--text-main);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+@media (max-width: 850px) {
+    .modal-body {
+        flex-direction: column;
+        overflow-y: auto;
+    }
+    .job-info {
+        border-right: none;
+        border-bottom: 1px solid rgba(100, 255, 218, 0.1);
+        height: 50%;
+    }
+}
