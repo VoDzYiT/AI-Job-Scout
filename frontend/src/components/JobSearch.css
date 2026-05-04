@@ -1,0 +1,129 @@
+.search-form {
+    display: flex;
+    gap: 20px;
+    padding: 30px;
+    align-items: flex-end;
+    margin-bottom: 40px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+
+.input-group label {
+    color: var(--accent);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.job-scroll-container {
+    max-height: 600px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.job-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.load-more-btn {
+    width: 100%;
+    margin: 20px 0;
+    padding: 15px;
+    border-style: dashed;
+}
+
+.load-more-btn:hover {
+    border-style: solid;
+}
+
+.no-more-jobs {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin: 20px 0;
+    font-style: italic;
+}
+
+.job-card {
+    padding: 25px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.job-card:hover {
+    transform: translateX(10px);
+    border-color: var(--accent);
+}
+
+.job-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.title-area h3 {
+    color: var(--white);
+    font-size: 1.2rem;
+    margin-bottom: 4px;
+}
+
+.company {
+    color: var(--accent);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.external-link {
+    text-decoration: none;
+    font-size: 1.2rem;
+    padding: 6px 10px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    transition: all 0.2s ease;
+}
+
+.external-link:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.1);
+}
+
+.job-preview {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.job-card-footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-match {
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 8px 20px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-match:hover {
+    background: rgba(100, 255, 218, 0.1);
+    transform: translateY(-2px);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 100px 0;
+    color: var(--text-dim);
+}

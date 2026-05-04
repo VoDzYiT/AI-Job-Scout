@@ -5,5 +5,6 @@ class Job(BaseModel):
     id: str
     title: str
     company: str
+    url: str
     description: str
     required_skills: List[str]
