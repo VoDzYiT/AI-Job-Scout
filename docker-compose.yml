@@ -1,0 +1,67 @@
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: ai-scout-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ai_job_scout
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ai-scout-network
+
+  # Service A: User & Gateway
+  service_a:
+    build: ./service_a
+    container_name: service-a
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/ai_job_scout
+      SERVICE_B_URL: http://service_b:8000
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - ai-scout-network
+
+  # Service B: AI/Scraper
+  service_b:
+    build: ./ai_service
+    container_name: service-b
+    restart: unless-stopped
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - ai-scout-network
+
+  # Frontend: React + Nginx
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - service_a
+    networks:
+      - ai-scout-network
+
+networks:
+  ai-scout-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

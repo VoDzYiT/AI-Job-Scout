@@ -1,0 +1,40 @@
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.dashboard-main {
+    flex: 1;
+    margin-left: 260px; /* Same as sidebar width */
+    padding: 40px;
+    background: var(--primary);
+}
+
+.dashboard-header {
+    margin-bottom: 40px;
+    border-bottom: 1px solid rgba(100, 255, 218, 0.1);
+    padding-bottom: 20px;
+}
+
+.dashboard-header h1 {
+    font-size: 2rem;
+    color: var(--white);
+}
+
+.dashboard-content {
+    max-width: 1000px;
+}
+
+.p-40 {
+    padding: 40px;
+}
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        flex-direction: column;
+    }
+    .dashboard-main {
+        margin-left: 0;
+        padding: 20px;
+    }
+}

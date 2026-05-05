@@ -1,0 +1,96 @@
+:root {
+  --primary: #0A192F;
+  --secondary: #112240;
+  --accent: #64FFDA;
+  --text-main: #CCD6F6;
+  --text-dim: #8892B0;
+  --white: #E6F1FF;
+  --error: #FF4D4D;
+  --success: #64FFDA;
+  --transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  --font-sans: 'Inter', -apple-system, system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--primary);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+a:hover {
+  filter: brightness(1.2);
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--font-sans);
+  transition: var(--transition);
+}
+
+input, textarea {
+  background: var(--secondary);
+  border: 1px solid var(--text-dim);
+  border-radius: 4px;
+  color: var(--white);
+  padding: 12px;
+  font-family: var(--font-sans);
+}
+
+input:focus {
+  outline: 2px solid var(--accent);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--secondary);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-dim);
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(17, 34, 64, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(100, 255, 218, 0.1);
+  border-radius: 12px;
+}
+
+/* Layout Utilities */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
