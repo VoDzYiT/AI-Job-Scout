@@ -1,0 +1,102 @@
+name: Build and Deploy to Azure Container Apps
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python dependencies
+        run: |
+          pip install flake8
+          pip install -r service_a/requirements.txt
+          pip install -r ai_service/requirements.txt
+
+      - name: Lint Python services
+        run: |
+          flake8 service_a/app ai_service/
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install Frontend dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Lint Frontend
+        working-directory: ./frontend
+        run: npm run lint
+
+  build-and-deploy:
+    needs: lint-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Login to Azure Container Registry
+        uses: azure/docker-login@v2
+        with:
+          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Build and Push Service A
+        run: |
+          docker build -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/service-a:${{ github.sha }} ./service_a
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/service-a:${{ github.sha }}
+
+      - name: Build and Push AI Service
+        run: |
+          docker build -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/ai-service:${{ github.sha }} ./ai_service
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/ai-service:${{ github.sha }}
+
+      - name: Build and Push Frontend
+        run: |
+          docker build -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/frontend:${{ github.sha }} ./frontend
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/frontend:${{ github.sha }}
+
+      - name: Deploy Service A to Container App
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          appSource: ./service_a
+          containerAppName: service-a
+          resourceGroup: ${{ secrets.RESOURCE_GROUP }}
+          imageToDeploy: ${{ secrets.REGISTRY_LOGIN_SERVER }}/service-a:${{ github.sha }}
+
+      - name: Deploy AI Service to Container App
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          appSource: ./ai_service
+          containerAppName: ai-service
+          resourceGroup: ${{ secrets.RESOURCE_GROUP }}
+          imageToDeploy: ${{ secrets.REGISTRY_LOGIN_SERVER }}/ai-service:${{ github.sha }}
+
+      - name: Deploy Frontend to Container App
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          appSource: ./frontend
+          containerAppName: frontend
+          resourceGroup: ${{ secrets.RESOURCE_GROUP }}
+          imageToDeploy: ${{ secrets.REGISTRY_LOGIN_SERVER }}/frontend:${{ github.sha }}
